@@ -1,7 +1,8 @@
-extern crate winapi;
 #[macro_use]
 extern crate log;
 extern crate env_logger;
+extern crate regex;
+extern crate winapi;
 
 use std::{
     env,
@@ -9,6 +10,9 @@ use std::{
     time::Duration,
 };
 
+mod command;
+mod error;
+mod keyboard;
 mod win;
 
 fn setup_logger() {
