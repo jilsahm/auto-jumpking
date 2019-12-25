@@ -6,10 +6,11 @@ use std::{
 };
 
 use regex::Regex;
+use crate::command::Direction;
 use crate::error::FileError;
 use crate::win;
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, PartialEq)]
 pub enum Key {
     Left,
     Right,
@@ -24,6 +25,16 @@ impl Key {
 
     fn pattern() -> Regex {
         "^(left|right|jump)$".parse::<Regex>().expect("Invalid pattern for config entry")
+    }
+}
+
+impl From<Direction> for Key {
+
+    fn from(direction: Direction) -> Self {
+        match direction {
+            Direction::Left => Key::Left,
+            Direction::Right => Key::Right,
+        }
     }
 }
 

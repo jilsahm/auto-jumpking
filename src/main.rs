@@ -15,6 +15,7 @@ use std::{
 mod command;
 mod error;
 mod keyboard;
+mod sequence;
 mod win;
 
 fn setup_logger() {

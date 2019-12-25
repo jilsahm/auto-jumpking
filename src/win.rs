@@ -56,7 +56,8 @@ pub fn focus_window(app: &str) {
 
 fn find_handle(app: &str) -> HWND {
     unsafe {
-        FindWindowA(std::ptr::null(), app)
+        //FindWindowA(std::ptr::null(), app)
+        unimplemented!()
     }
 }
 
