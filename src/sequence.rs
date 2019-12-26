@@ -4,11 +4,11 @@ use std::{
     path::Path,
 };
 
-use crate::command::{Command, Jump, Move};
+use crate::command::Command;
 use crate::keyboard::KeyBoard;
 
 pub struct Sequence {
-    commands: Vec<Box<dyn Command>>,
+    commands: Vec<Command>,
 }
 
 impl Sequence {
@@ -16,7 +16,7 @@ impl Sequence {
     pub fn from_file(path: &Path) -> Result<Self, std::io::Error> {
         let file = File::open(path)?;
         let reader = BufReader::new(file);
-        let mut commands = Vec::default();
+        //let mut commands = Vec::default();
 
         reader
             .lines()
@@ -29,11 +29,11 @@ impl Sequence {
         unimplemented!()
     }
 
-    fn parse_line(line: &str) -> Vec<Box<dyn Command> {
+    fn parse_line(line: &str) -> Vec<Command> {
         unimplemented!()
     }
 
-    pub fn run(&self, keyboard:: &KeyBoard) {
+    pub fn run(&self, keyboard: &KeyBoard) {
         self.commands
             .iter()
             .for_each(|cmd| cmd.trigger(keyboard));
@@ -42,10 +42,11 @@ impl Sequence {
 
 #[cfg(test)]
 mod tests {
+    use std::path::PathBuf;
     use super::Sequence;
 
     #[test]
     fn test_sequence_from_file_failure() {
-        assert!(Sequence::from_file("unknown.lvl").is_err());
+        assert!(Sequence::from_file(&PathBuf::from("unknown.lvl")).is_err());
     }
 }
