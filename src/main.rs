@@ -18,6 +18,8 @@ mod keyboard;
 mod sequence;
 mod win;
 
+use crate::sequence::Sequence;
+
 fn setup_logger() {
     const LOG_VAR: &'static str = "RUST_LOG";
     match env::var(LOG_VAR) {
@@ -37,6 +39,13 @@ fn startup_delay(secs: u64) {
             info!("{}", secs - s);
             sleep(Duration::from_secs(1));
         });
+}
+
+fn load_sequence() -> Result<Sequence, std::io::Error> {
+    let file = env::args().nth(1).unwrap();
+    let mut me = env::current_exe().expect("Cannot locate own directory");
+    me.push(file);
+    Sequence::from_file(&me)
 }
 
 fn main() {
