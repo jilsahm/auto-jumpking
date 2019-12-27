@@ -120,7 +120,7 @@ mod tests {
 
     fn get_test_config_path() -> PathBuf {
         let mut path = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
-        path.push("ressources/keys.cfg");
+        path.push("resources/keys.cfg");
         path
     }
 

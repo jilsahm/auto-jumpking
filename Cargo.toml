@@ -3,6 +3,7 @@ name = "auto-jumpking"
 version = "0.1.0"
 authors = ["Jil Sahm"]
 edition = "2018"
+build = "build.rs"
 
 [dependencies]
 env_logger = "0.5.3"
