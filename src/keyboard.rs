@@ -85,8 +85,12 @@ impl Layout {
         Ok(Layout { keys, })
     }
 
-    fn code_for(key: &Key) -> u16 {
-        unimplemented!()
+    fn code_for(&self, key: &Key) -> u16 {
+        self.keys
+            .iter()
+            .find(|k| k.0 == *key)
+            .unwrap()
+            .1
     }
 
     fn len(&self) -> usize {
@@ -115,12 +119,12 @@ impl KeyBoard {
 
 #[cfg(test)]
 mod tests {
-    use super::Layout;
+    use super::{Key, Layout};
     use std::path::PathBuf;
 
     fn get_test_config_path() -> PathBuf {
         let mut path = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
-        path.push("resources/keys.cfg");
+        path.push("test/keys.cfg");
         path
     }
 
@@ -130,5 +134,17 @@ mod tests {
         assert!(layout.is_ok());
         let layout = layout.unwrap();
         assert_eq!(3usize, layout.len());
+    }
+
+    #[test]
+    fn test_layout_code_for() {
+        let layout = Layout::from_config_file(&get_test_config_path()).unwrap();
+        vec![
+            (Key::Left, 0x41),
+            (Key::Right, 0x44),
+            (Key::Jump, 0x20),
+        ]
+        .iter()
+        .for_each(|(sample, expected)| assert_eq!(*expected, layout.code_for(sample)));
     }
 }

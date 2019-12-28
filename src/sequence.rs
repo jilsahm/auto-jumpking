@@ -88,7 +88,7 @@ mod tests {
 
     fn get_testfile_path() -> PathBuf {
         let mut path = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
-        path.push("resources/test.lvl");
+        path.push("test/test.lvl");
         path
     }
 
