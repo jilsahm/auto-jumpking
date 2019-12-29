@@ -26,3 +26,27 @@ impl From<Error> for FileError {
         FileError::IoError(e)
     }
 }
+
+pub enum ArgsError {
+    MissingLevelParameter,
+    IoError
+}
+
+impl Display for ArgsError {
+    fn fmt(&self, formatter: &mut Formatter) -> Result<(), std::fmt::Error> {
+        write!(
+            formatter,
+            "{}",
+            match self {
+                ArgsError::MissingLevelParameter => "The level paramter is missing".to_string(),
+                ArgsError::IoError => "Given level file could not be read. Be sure that the file exists in the resource folder ".to_string(),
+            }
+        )
+    }
+}
+
+impl From<Error> for ArgsError {
+    fn from(_: Error) -> Self {
+        ArgsError::IoError
+    }
+}

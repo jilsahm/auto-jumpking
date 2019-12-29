@@ -1,7 +1,7 @@
 use std::{
     io::{BufRead, BufReader},
     fs::File,
-    path::Path,
+    path::{Path, PathBuf},
     str::FromStr,
 };
 
@@ -104,16 +104,16 @@ pub struct KeyBoard {
 
 impl KeyBoard {
 
-    pub fn default() -> Self {
-        unimplemented!()
+    pub fn new(config: &Path) -> Result<Self, std::io::Error> {
+        Ok(Self { layout: Layout::from_config_file(config)?, })
     }
 
     pub fn key_down(&self, key: Key) {
-        unimplemented!()
+        win::key_down(self.layout.code_for(&key));
     }
     
     pub fn key_up(&self, key: Key) {
-        unimplemented!()
+        win::key_up(self.layout.code_for(&key));
     }
 }
 

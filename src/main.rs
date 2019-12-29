@@ -8,6 +8,7 @@ extern crate winapi;
 
 use std::{
     env,
+    path::PathBuf,
     thread::sleep,
     time::Duration,
 };
@@ -18,6 +19,8 @@ mod keyboard;
 mod sequence;
 mod win;
 
+use crate::error::ArgsError;
+use crate::keyboard::KeyBoard;
 use crate::sequence::Sequence;
 
 fn setup_logger() {
@@ -41,14 +44,35 @@ fn startup_delay(secs: u64) {
         });
 }
 
-fn load_sequence() -> Result<Sequence, std::io::Error> {
-    let file = env::args().nth(1).unwrap();
-    let mut me = env::current_exe().expect("Cannot locate own directory");
-    me.push(file);
-    Sequence::from_file(&me)
+fn load_sequence() -> Result<Sequence, ArgsError> {
+    match env::args().nth(1) {
+        Some(arg) => {
+            let mut me = PathBuf::from("resources");
+            me.push(arg);
+            Sequence::from_file(&me).map_err(|_| ArgsError::IoError)
+        },
+        None => Err(ArgsError::MissingLevelParameter),
+    }
 }
 
 fn main() {
     setup_logger();
-    startup_delay(5);
+    match KeyBoard::new(&PathBuf::from("resources/keys.cfg")) {
+        Ok(keyboard) => {
+            info!("Successfully loaded keyboard");
+            match load_sequence() {
+                Ok(sequence) => {
+                    info!("Sequence successfully loaded");
+                    startup_delay(5);
+                    sequence.run(&keyboard);
+                    info!("Finished sequence")
+                },
+                Err(what) => {
+                    warn!("{}", what);
+                    info!("Usage: auto-jumpking [levelfilename]");
+                },
+            }
+        },
+        Err(what) => error!("Failed to load keyboard because: {}", what),
+    }
 }

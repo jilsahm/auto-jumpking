@@ -1,4 +1,5 @@
 use std::{
+    fmt::{Display, Formatter},
     str::FromStr,
     time::Duration,
     thread::sleep,
@@ -15,24 +16,31 @@ pub struct Command {
 }
 
 impl Command {
+    const LATENCY: u64 = 5;
+    const WAITTIME: u64 = 25;
 
     pub fn new(direction: Direction, range: u64, jump: bool) -> Self {
         Self { direction, range, jump, }
     }
 
     pub fn trigger(&self, keyboard: &KeyBoard) {
-        const LATENCY: u64 = 5;
+        info!("Triggering {}", self);
         if self.jump {
             keyboard.key_down(Key::Jump);
-            sleep(Duration::from_millis(LATENCY));
+            sleep(Duration::from_millis(Command::LATENCY));
         }
         keyboard.key_down(self.direction.clone().into());        
         sleep(Duration::from_millis(self.range));
         if self.jump {
             keyboard.key_up(Key::Jump);
-            sleep(Duration::from_millis(LATENCY));
+            sleep(Duration::from_millis(Command::LATENCY));
         }
         keyboard.key_up(self.direction.clone().into());
+        if self.jump {
+            sleep(Duration::from_millis(self.range));
+        } else {
+            sleep(Duration::from_millis(Command::WAITTIME));
+        }
     }
 
     fn pattern() -> &'static Regex {
@@ -40,6 +48,19 @@ impl Command {
             static ref PATTERN: Regex = "^[jm][rl][0-9]{1,4}$".parse().expect("Check command regex");            
         } 
         &PATTERN  
+    }
+}
+
+impl Display for Command {
+
+    fn fmt(&self, formatter: &mut Formatter) -> Result<(), std::fmt::Error> {
+        write!(
+            formatter,
+            "{}-{:?}-{}",
+            if self.jump { "Jump" } else { "Move" },
+            self.direction,
+            self.range,
+        )
     }
 }
 
