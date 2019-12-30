@@ -19,6 +19,7 @@ impl Command {
     const LATENCY: u64 = 5;
     const WAITTIME: u64 = 25;
 
+    #[allow(dead_code)]
     pub fn new(direction: Direction, range: u64, jump: bool) -> Self {
         Self { direction, range, jump, }
     }

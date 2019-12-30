@@ -1,5 +1,6 @@
 use std::{
     cmp::Ordering,
+    ffi::CString,
     mem::{size_of, transmute_copy},
 };
 
@@ -49,16 +50,21 @@ fn trigger_key_event(flags: u32, vk: u16) {
     unsafe { SendInput(1, &mut input as LPINPUT, size_of::<INPUT>() as c_int) };
 }
 
-pub fn focus_window(app: &str) {
-    //unsafe { SetFocus(1) };
+pub fn focus_window(app: &str) -> Result<(), String>{
+    let handle = find_handle(app);
+    if handle.is_null() {
+        Err(format!("Cannot focus {}, seems like it is not running", app))
+    } else {
+        unsafe { SetForegroundWindow(handle); }       
+        Ok(())
+    }
+    
 }
 
 
 fn find_handle(app: &str) -> HWND {
-    unsafe {
-        //FindWindowA(std::ptr::null(), app)
-        unimplemented!()
-    }
+    let cstr = CString::new(app).expect("{} cannot be converted to a C string");
+    unsafe { FindWindowA(std::ptr::null(), cstr.as_ptr()) }
 }
 
 #[cfg(test)]

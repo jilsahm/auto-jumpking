@@ -1,7 +1,7 @@
 use std::{
     io::{BufRead, BufReader},
     fs::File,
-    path::{Path, PathBuf},
+    path::Path,
     str::FromStr,
 };
 
@@ -114,6 +114,10 @@ impl KeyBoard {
     
     pub fn key_up(&self, key: Key) {
         win::key_up(self.layout.code_for(&key));
+    }
+
+    pub fn len(&self) -> usize {
+        self.layout.len()
     }
 }
 

@@ -1,5 +1,11 @@
+# Align starting position
+ml5000,mr1750
+
 # Screen 1
-jr1000,mr80,jl1000,ml300,jr1000
+jr1000,mr90,jl1000,ml300,jr1000
 
 # Screen 2 (Redcrown Woods)
-mr100,jl800,jl250,jl800,jl300 
+mr200,jl800,jl250,jl800,jl300,jr1000
+
+# Screen 3
+mr400,jr100
