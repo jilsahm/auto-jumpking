@@ -17,7 +17,7 @@ pub struct Command {
 
 impl Command {
     const LATENCY: u64 = 5;
-    const WAITTIME: u64 = 25;
+    const WAITTIME: u64 = 50;
 
     #[allow(dead_code)]
     pub fn new(direction: Direction, range: u64, jump: bool) -> Self {
@@ -38,7 +38,7 @@ impl Command {
         }
         keyboard.key_up(self.direction.clone().into());
         if self.jump {
-            sleep(Duration::from_millis(self.range));
+            sleep(Duration::from_millis(self.range + Command::WAITTIME * 3));
         } else {
             sleep(Duration::from_millis(Command::WAITTIME));
         }

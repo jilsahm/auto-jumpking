@@ -5,7 +5,7 @@ ml5000,mr1750
 jr1000,mr90,jl1000,ml300,jr1000
 
 # Screen 2 (Redcrown Woods)
-mr200,jl800,jl250,jl800,jl300,jr1000
+mr200,jl800,mr450,jl380,jl800,jl300,mr370,jr1000
 
 # Screen 3
-mr400,jr100
+mr500,jr120,mr400,jr350,mr200,jl400,jl500,jl400
